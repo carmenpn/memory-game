@@ -31,8 +31,8 @@ body {
 h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
+    font-size: 2.3em;
 }
-
 /*
  * Styles for the deck of cards
  */
@@ -89,6 +89,7 @@ h1 {
     text-align: left;
     width: 345px;
     margin-bottom: 10px;
+    font-size: 1.4em;
 }
 
 .score-panel .stars {
