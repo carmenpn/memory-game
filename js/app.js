@@ -10,7 +10,7 @@
 // DECLARE VARIABLES
 // ======================
 
-let shuffleCards = shuffle(cardList);
+let shuffleCards;
 let openCards = [];
 let matchCards = [];
 
@@ -18,15 +18,16 @@ let matchCards = [];
 
 const scorePanel 	= document.getElementsByClassName("score-panel"),
 	  starsPanel	= document.querySelector(".stars"),
-	  stars 		= starsPanel.getElementsByTagName("li"),
+	  stars 		= document.querySelectorAll(".stars li"),
 	  moves 		= document.querySelector(".moves"),
 	  timer 		= document.querySelector(".timer"),
-	  restartButton = document.getElementsByClassName("restart");
+	  restartButton = document.querySelector(".restart");
 
 // Timer
 let firstClick = false;
 let min = 0,
-	sec = 0;
+	sec = 0,
+	setTimer;
 
 // Card Deck
 
@@ -35,6 +36,7 @@ const deckOfCards = document.getElementsByClassName("deck"),
 
 //Counting moves
 let countMoves = 0;
+let memorizeCounts = 0;
 
 /*
  * Display the cards on the page
@@ -44,10 +46,11 @@ let countMoves = 0;
  */
 
 reset();
-// restartButton.addEventListener("click", reset);
+restartButton.addEventListener("click", reset);
 
 // Reset deck of cards and generate random cards
 function reset() {
+	shuffleCards = shuffle(cardList);
 	for(let i = 0; i < shuffleCards.length; i++) {
 		card[i].innerHTML = "";
 		// Remove classes
@@ -57,8 +60,15 @@ function reset() {
 		// Automatically generate HTML
 		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
 	}
+	for (let i = 0; i < stars.length; i++) {
+		stars[i].style.visibility = "visible";
+	}
+	resetTimer();
+	countMoves = 0;
 	moves.textContent = "0";
-	timer.textContent = "00:00";
+	memorizeCounts = 0;
+	openCards = [];
+	matchCards = [];
 }
 
  // Shuffle function from http://stackoverflow.com/a/2450976
@@ -95,7 +105,10 @@ for(let i = 0; i < card.length; i++) {
 	card[i].addEventListener("click", function(evt) {
 		displayCards(evt);
 		addToOpenCards(evt);
-		startClock();
+		if(!firstClick) {
+			firstClick = true;
+			let setTimer = setInterval(countingTime, 1000);
+		}
 		counterMoves();
 	});
 }
@@ -106,8 +119,7 @@ for(let i = 0; i < card.length; i++) {
 
 // Display the card's symbol
 function displayCards(evt) {
-	evt.target.classList.add("open");
-	evt.target.classList.add("show");
+	evt.target.classList.add("open", "show");
 }
 
 // Add the card to a *list* of "open" cards
@@ -149,32 +161,41 @@ function cardsDontMatch(arr) {
 // SCORE PANEL
 // ======================
 
-// Setting the timer
-function startClock() {
-	if(!firstClick) {
-		firstClick = true;
-		let setTimer = setInterval(function() {
-			sec++;
-			if(sec < 10 && min < 10) {
-				timer.textContent = "0" + min + ":" + "0" + sec;
-			} else if(sec < 60 && min < 10) {
-				timer.textContent = "0" + min + ":" + sec;
-			} else {
-				sec = 0;
-				min++;
-				sec++;
-				if(min > 9) {
-					timer.textContent = min + ":" + "0" + sec;
-				}
-			}
-		}, 1000);
+// Counting time for Set Interval
+function countingTime() {
+	sec++;
+	if(sec < 10 && min < 10) {
+		timer.textContent = "0" + min + ":" + "0" + sec;
+	} else if(sec < 60 && min < 10) {
+		timer.textContent = "0" + min + ":" + sec;
+	} else {
+		sec = 0;
+		min++;
+		sec++;
+		if(min > 9) {
+			timer.textContent = min + ":" + "0" + sec;
+		}
 	}
 }
 
-// Couting the moves of the user
+// Reset timer
+function resetTimer() {
+	clearInterval(setTimer);
+	sec = 0;
+	min = 0;
+	timer.textContent = "00:00";
+}
+
+// Counting the moves of the user
 function counterMoves() {
 	countMoves++;
 	moves.textContent = countMoves;
+	if(countMoves === 20) {
+		stars.item(0).style.visibility = "hidden";
+	} else if(countMoves === 40) {
+		stars.item(1).style.visibility = "hidden";
+	}
+	memorizeCounts = countMoves;
 }
 
 // Display pop-up if user wins
