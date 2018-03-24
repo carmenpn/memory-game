@@ -64,6 +64,7 @@ function reset() {
 		stars[i].style.visibility = "visible";
 	}
 	resetTimer();
+	firstClick = false;
 	countMoves = 0;
 	moves.textContent = "0";
 	memorizeCounts = 0;
@@ -107,7 +108,7 @@ for(let i = 0; i < card.length; i++) {
 		addToOpenCards(evt);
 		if(!firstClick) {
 			firstClick = true;
-			let setTimer = setInterval(countingTime, 1000);
+			setTimer = setInterval(countingTime, 1000);
 		}
 		counterMoves();
 	});
