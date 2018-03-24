@@ -12,20 +12,29 @@
 
 let shuffleCards = shuffle(cardList);
 let openCards = [];
+let matchCards = [];
 
 // Score Panel Section
 
 const scorePanel 	= document.getElementsByClassName("score-panel"),
 	  starsPanel	= document.querySelector(".stars"),
 	  stars 		= starsPanel.getElementsByTagName("li"),
-	  moves 		= document.getElementsByClassName("moves"),
-	  timer 		= document.getElementsByClassName("timer"),
+	  moves 		= document.querySelector(".moves"),
+	  timer 		= document.querySelector(".timer"),
 	  restartButton = document.getElementsByClassName("restart");
+
+// Timer
+let firstClick = false;
+let min = 0,
+	sec = 0;
 
 // Card Deck
 
 const deckOfCards = document.getElementsByClassName("deck"),
 	  card 		  = document.getElementsByClassName("card");
+
+//Counting moves
+let countMoves = 0;
 
 /*
  * Display the cards on the page
@@ -48,6 +57,8 @@ function reset() {
 		// Automatically generate HTML
 		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
 	}
+	moves.textContent = "0";
+	timer.textContent = "00:00";
 }
 
  // Shuffle function from http://stackoverflow.com/a/2450976
@@ -84,6 +95,8 @@ for(let i = 0; i < card.length; i++) {
 	card[i].addEventListener("click", function(evt) {
 		displayCards(evt);
 		addToOpenCards(evt);
+		startClock();
+		counterMoves();
 	});
 }
 
@@ -111,6 +124,7 @@ function cardsMatch(arr) {
 		for(let i = 0; i < arr.length; i++) {
 			arr[i].parentNode.classList.add("match", "card", "show");
 		}
+		matchCards.push(arr[0]);
 		arr.splice(0, arr.length);
 	}
 }
@@ -129,4 +143,41 @@ function cardsDontMatch(arr) {
 			arr.splice(0, arr.length);
 		}, 400);
 	}
+}
+
+// ======================
+// SCORE PANEL
+// ======================
+
+// Setting the timer
+function startClock() {
+	if(!firstClick) {
+		firstClick = true;
+		let setTimer = setInterval(function() {
+			sec++;
+			if(sec < 10 && min < 10) {
+				timer.textContent = "0" + min + ":" + "0" + sec;
+			} else if(sec < 60 && min < 10) {
+				timer.textContent = "0" + min + ":" + sec;
+			} else {
+				sec = 0;
+				min++;
+				sec++;
+				if(min > 9) {
+					timer.textContent = min + ":" + "0" + sec;
+				}
+			}
+		}, 1000);
+	}
+}
+
+// Couting the moves of the user
+function counterMoves() {
+	countMoves++;
+	moves.textContent = countMoves;
+}
+
+// Display pop-up if user wins
+if(matchCards.length === 8) {
+	popUp.style.display = "block";
 }
