@@ -81,6 +81,19 @@ h1 {
     font-size: 33px;
 }
 
+.deck .card.wrong {
+    background-color: #ce0000;
+    animation: shake 0.3s;
+    animation-iteration-count: 0.4s;
+}
+
+/*For wrong animation*/
+@keyframes shake {
+    0% { transform: translate(2px, 3px) rotate(0deg); }
+    50% { transform: translate(-6px, 6px) rotate(0deg); }
+    100% { transform: translate(2px, -4px) rotate(-1deg); }
+}
+
 /*
  * Styles for the Score Panel
  */

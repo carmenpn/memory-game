@@ -11,6 +11,7 @@
 // ======================
 
 let shuffleCards = shuffle(cardList);
+let openCards = [];
 
 // Score Panel Section
 
@@ -34,11 +35,17 @@ const deckOfCards = document.getElementsByClassName("deck"),
  */
 
 reset();
+// restartButton.addEventListener("click", reset);
 
 // Reset deck of cards and generate random cards
 function reset() {
 	for(let i = 0; i < shuffleCards.length; i++) {
 		card[i].innerHTML = "";
+		// Remove classes
+		card[i].classList.remove("open");
+		card[i].classList.remove("show");
+		card[i].classList.remove("match");
+		// Automatically generate HTML
 		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
 	}
 }
@@ -58,7 +65,6 @@ function shuffle(array) {
     return array;
 }
 
-
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -69,3 +75,58 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+// ======================
+// CARDS LISTENER
+// ======================
+
+for(let i = 0; i < card.length; i++) {
+	card[i].addEventListener("click", function(evt) {
+		displayCards(evt);
+		addToOpenCards(evt);
+	});
+}
+
+// ======================
+// GAME FUNCTIONS
+// ======================
+
+// Display the card's symbol
+function displayCards(evt) {
+	evt.target.classList.add("open");
+	evt.target.classList.add("show");
+}
+
+// Add the card to a *list* of "open" cards
+function addToOpenCards(evt) {
+	let clickedCard = evt.target.firstElementChild;
+	openCards.push(clickedCard);
+	cardsMatch(openCards);
+	cardsDontMatch(openCards);
+}
+
+// If cards match
+function cardsMatch(arr) {
+	if(arr.length === 2 && arr[0].className === arr[1].className) {
+		for(let i = 0; i < arr.length; i++) {
+			arr[i].parentNode.classList.add("match", "card", "show");
+		}
+		arr.splice(0, arr.length);
+	}
+}
+
+// If cards don't match
+function cardsDontMatch(arr) {
+	if(arr.length === 2 && arr[0].className !== arr[1].className) {
+		for(let i = 0; i < arr.length; i++) {
+			arr[i].parentNode.classList.add("wrong", "card", "show");
+		}
+		setTimeout(function() {
+			for(let i = 0; i < arr.length; i++) {
+				arr[i].parentNode.classList.remove("wrong", "card", "show", "open");
+				arr[i].parentNode.classList.add("card");
+			}
+			arr.splice(0, arr.length);
+		}, 400);
+	}
+}
