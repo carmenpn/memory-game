@@ -2,6 +2,29 @@
  * Create a list that holds all of your cards
  */
 
+ const cardList = ["fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", 
+ "fa fa-cube", "fa fa-anchor", "fa fa-leaf", "fa fa-bicycle", "fa fa-diamond", "fa fa-bomb", 
+ "fa fa-leaf", "fa fa-bomb", "fa fa-bolt", "fa fa-bicycle", "fa fa-paper-plane-o", "fa fa-cube"];
+
+// ======================
+// DECLARE VARIABLES
+// ======================
+
+let shuffleCards = shuffle(cardList);
+
+// Score Panel Section
+
+const scorePanel 	= document.getElementsByClassName("score-panel"),
+	  starsPanel	= document.querySelector(".stars"),
+	  stars 		= starsPanel.getElementsByTagName("li"),
+	  moves 		= document.getElementsByClassName("moves"),
+	  timer 		= document.getElementsByClassName("timer"),
+	  restartButton = document.getElementsByClassName("restart");
+
+// Card Deck
+
+const deckOfCards = document.getElementsByClassName("deck"),
+	  card 		  = document.getElementsByClassName("card");
 
 /*
  * Display the cards on the page
@@ -10,7 +33,17 @@
  *   - add each card's HTML to the page
  */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+reset();
+
+// Reset deck of cards and generate random cards
+function reset() {
+	for(let i = 0; i < shuffleCards.length; i++) {
+		card[i].innerHTML = "";
+		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
+	}
+}
+
+ // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
