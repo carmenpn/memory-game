@@ -10,9 +10,9 @@
 // DECLARE VARIABLES
 // ======================
 
-let shuffleCards;
-let openCards = [];
-let matchCards = [];
+let shuffleCards,
+	openCards = [],
+	matchCards = [];
 
 // Score Panel Section
 
@@ -27,7 +27,10 @@ const scorePanel 	= document.getElementsByClassName("score-panel"),
 let firstClick = false;
 let min = 0,
 	sec = 0,
-	setTimer;
+	setTimer,
+	timeNeeded,
+	endingTime,
+	startingTime;
 
 // Card Deck
 
@@ -35,8 +38,8 @@ const deckOfCards = document.getElementsByClassName("deck"),
 	  card 		  = document.getElementsByClassName("card");
 
 //Counting moves
-let countMoves = 0;
-let memorizeCounts = 0;
+let countMoves 		= 0,
+	memorizeCounts 	= 0;
 
 /*
  * Display the cards on the page
@@ -46,7 +49,6 @@ let memorizeCounts = 0;
  */
 
 reset();
-restartButton.addEventListener("click", reset);
 
 // Reset deck of cards and generate random cards
 function reset() {
@@ -54,9 +56,7 @@ function reset() {
 	for(let i = 0; i < shuffleCards.length; i++) {
 		card[i].innerHTML = "";
 		// Remove classes
-		card[i].classList.remove("open");
-		card[i].classList.remove("show");
-		card[i].classList.remove("match");
+		card[i].classList.remove("open", "show", "match");
 		// Automatically generate HTML
 		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
 	}
@@ -70,6 +70,7 @@ function reset() {
 	memorizeCounts = 0;
 	openCards = [];
 	matchCards = [];
+	timeNeeded = 0;
 }
 
  // Shuffle function from http://stackoverflow.com/a/2450976
@@ -111,8 +112,11 @@ for(let i = 0; i < card.length; i++) {
 			setTimer = setInterval(countingTime, 1000);
 		}
 		counterMoves();
+		measureTime();
 	});
 }
+
+restartButton.addEventListener("click", reset);
 
 // ======================
 // GAME FUNCTIONS
@@ -185,6 +189,26 @@ function resetTimer() {
 	sec = 0;
 	min = 0;
 	timer.textContent = "00:00";
+}
+
+// Measure time start - end
+function measureTime() {
+	if(countMoves === 1) {
+		startingTime = performance.now();
+	}
+	if(matchCards.length === 8) {
+		endingTime = performance.now();
+		resetTimer();
+		moves.textContent = "0";
+		if(countMoves > 19) {
+			stars.item(0).style.visibility = "visible";
+			stars.item(1).style.visibility = "visible";
+		} else if(countMoves > 39) {
+			stars.item(0).style.visibility = "visible";
+			stars.item(1).style.visibility = "visible";
+		}
+	}
+	timeNeeded = ((endingTime - startingTime) / 1000).toFixed(0) + " seconds";
 }
 
 // Counting the moves of the user
