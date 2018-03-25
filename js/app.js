@@ -25,11 +25,12 @@ const scorePanel 	= document.getElementsByClassName("score-panel"),
 
 //Pop-up Window
 
-const popUp 	 = document.querySelector(".pop-up"),
-	  closePopUp = document.querySelector(".pop-up-close"),
-	  timePopUp  = document.querySelector(".pop-up-time"),
-	  movesPopUp = document.querySelector(".pop-up-moves"),
-	  starsPopUp = document.querySelector(".pop-up-stars");
+const popUp 	   = document.querySelector(".pop-up"),
+	  popUpContent = document.querySelector(".pop-up-content"),
+	  closePopUp   = document.querySelector(".pop-up-close"),
+	  timePopUp    = document.querySelector(".pop-up-time"),
+	  movesPopUp   = document.querySelector(".pop-up-moves"),
+	  starsPopUp   = document.querySelector(".pop-up-stars");
 
 // Timer
 
@@ -165,8 +166,7 @@ function cardsDontMatch(arr) {
 		}
 		setTimeout(function() {
 			for(let i = 0; i < arr.length; i++) {
-				arr[i].parentNode.classList.remove("wrong", "card", "show", "open");
-				arr[i].parentNode.classList.add("card");
+				arr[i].parentNode.classList.remove("wrong", "show", "open");
 			}
 			arr.splice(0, arr.length);
 		}, 400);
@@ -211,10 +211,10 @@ function measureTime() {
 		endingTime = performance.now();
 		resetTimer();
 		moves.textContent = "0";
-		if(countMoves > 29) {
+		if(countMoves > 34) {
 			stars.item(0).style.visibility = "visible";
 			stars.item(1).style.visibility = "visible";
-		} else if(countMoves > 49) {
+		} else if(countMoves > 54) {
 			stars.item(0).style.visibility = "visible";
 			stars.item(1).style.visibility = "visible";
 		}
@@ -226,9 +226,9 @@ function measureTime() {
 function counterMoves() {
 	countMoves++;
 	moves.textContent = countMoves;
-	if(countMoves === 30) {
+	if(countMoves === 35) {
 		stars.item(0).style.visibility = "hidden";
-	} else if(countMoves === 50) {
+	} else if(countMoves === 55) {
 		stars.item(1).style.visibility = "hidden";
 	}
 	memorizeCounts = countMoves;
@@ -246,16 +246,16 @@ function displayPopUp() {
 			timePopUp.textContent = timeNeeded + " seconds";
 			movesPopUp.textContent = memorizeCounts;
 			starsPopUp.innerHTML = "";
-			if(countMoves > 29) {
+			if(countMoves > 34) {
 				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
-			} else if(countMoves > 49) {
+			} else if(countMoves > 54) {
 				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
 			} else {
 				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
 			}
+			reset();
 			closePopUp.addEventListener("click", function() {
 				popUp.style.display = "none";
-				reset();
 			});
 		}, 400);
 	}
