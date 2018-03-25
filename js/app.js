@@ -23,7 +23,16 @@ const scorePanel 	= document.getElementsByClassName("score-panel"),
 	  timer 		= document.querySelector(".timer"),
 	  restartButton = document.querySelector(".restart");
 
+//Pop-up Window
+
+const popUp 	 = document.querySelector(".pop-up"),
+	  closePopUp = document.querySelector(".pop-up-close"),
+	  timePopUp  = document.querySelector(".pop-up-time"),
+	  movesPopUp = document.querySelector(".pop-up-moves"),
+	  starsPopUp = document.querySelector(".pop-up-stars");
+
 // Timer
+
 let firstClick = false;
 let min = 0,
 	sec = 0,
@@ -38,6 +47,7 @@ const deckOfCards = document.getElementsByClassName("deck"),
 	  card 		  = document.getElementsByClassName("card");
 
 //Counting moves
+
 let countMoves 		= 0,
 	memorizeCounts 	= 0;
 
@@ -113,6 +123,7 @@ for(let i = 0; i < card.length; i++) {
 		}
 		counterMoves();
 		measureTime();
+		displayPopUp();
 	});
 }
 
@@ -200,30 +211,52 @@ function measureTime() {
 		endingTime = performance.now();
 		resetTimer();
 		moves.textContent = "0";
-		if(countMoves > 19) {
+		if(countMoves > 29) {
 			stars.item(0).style.visibility = "visible";
 			stars.item(1).style.visibility = "visible";
-		} else if(countMoves > 39) {
+		} else if(countMoves > 49) {
 			stars.item(0).style.visibility = "visible";
 			stars.item(1).style.visibility = "visible";
 		}
 	}
-	timeNeeded = ((endingTime - startingTime) / 1000).toFixed(0) + " seconds";
+	timeNeeded = ((endingTime - startingTime) / 1000).toFixed(0);
 }
 
 // Counting the moves of the user
 function counterMoves() {
 	countMoves++;
 	moves.textContent = countMoves;
-	if(countMoves === 20) {
+	if(countMoves === 30) {
 		stars.item(0).style.visibility = "hidden";
-	} else if(countMoves === 40) {
+	} else if(countMoves === 50) {
 		stars.item(1).style.visibility = "hidden";
 	}
 	memorizeCounts = countMoves;
 }
 
+// ======================
+// POP UP WINDOW
+// ======================
+
 // Display pop-up if user wins
-if(matchCards.length === 8) {
-	popUp.style.display = "block";
+function displayPopUp() {
+	if(matchCards.length === 8) {
+		setTimeout(function() {
+			popUp.style.display = "block";
+			timePopUp.textContent = timeNeeded + " seconds";
+			movesPopUp.textContent = memorizeCounts;
+			starsPopUp.innerHTML = "";
+			if(countMoves > 29) {
+				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
+			} else if(countMoves > 49) {
+				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
+			} else {
+				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
+			}
+			closePopUp.addEventListener("click", function() {
+				popUp.style.display = "none";
+				reset();
+			});
+		}, 400);
+	}
 }
