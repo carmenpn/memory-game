@@ -22,6 +22,7 @@ body {
 }
 
 .container {
+    max-width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,7 +40,7 @@ h1 {
 
 .deck {
     width: 660px;
-    min-height: 680px;
+    /*min-height: 680px;*/
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
     padding: 32px;
     border-radius: 10px;
@@ -54,6 +55,7 @@ h1 {
 .deck .card {
     height: 125px;
     width: 125px;
+    margin: 8px;
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
@@ -145,7 +147,7 @@ h1 {
 
 .pop-up-content {
     text-align: left;
-    width: 80%;
+    width: 550px;
     margin: 15% auto;
     top: 150px;
     background-image: url('../img/pop-up-background.jpg');
@@ -153,7 +155,7 @@ h1 {
 }
 
 .pop-up h2 {
-    padding: 10px 0 0 50px;
+    padding: 20px 0 0 50px;
 }
 
 .pop-up-table {
@@ -171,4 +173,98 @@ h1 {
 .pop-up-close:hover {
     cursor: pointer;
     text-decoration: none;
+}
+
+/*
+ * Responsive Design
+ */
+
+@media screen and (max-width: 700px) {
+    .deck {
+        width: 500px;
+    }
+
+    .deck .card {
+        width: 115px;
+        height: 115px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .score-panel {
+        width: 400px;
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .pop-up-content {
+        font-size: 0.9em;
+        width: 90%;
+    }
+
+    .pop-up-content h2 {
+        font-size: 1.3em;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .deck {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .deck .card {
+        width: 85px;
+        height: 85px;
+    }
+
+    h1 {
+        font-size: 1.7em;
+    }
+
+    .score-panel {
+        width: 250px;
+        font-size: 1em;
+    }
+
+    .score-panel .restart {
+        float: right;
+        cursor: pointer;
+        font-size: 1.3em;
+        padding: 0 5px;
+    }
+
+    .score-panel .timer {
+        padding-left: 30px;
+    }
+
+    .deck .card.show,
+    .deck .card.match {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .pop-up-table td {
+        padding: 0 10px;
+    }
+
+    .pop-up-content h2 {
+        font-size: 1.18em;
+        padding-left: 38px;
+    }
+
+    .pop-up-content {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .deck .card {
+        width: 70px;
+        height: 70px;
+    }
 }

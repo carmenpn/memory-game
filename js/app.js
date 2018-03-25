@@ -141,7 +141,7 @@ function displayCards(evt) {
 
 // Add the card to a *list* of "open" cards
 function addToOpenCards(evt) {
-	let clickedCard = evt.target.firstElementChild;
+	let clickedCard = evt.target.firstChild;
 	openCards.push(clickedCard);
 	cardsMatch(openCards);
 	cardsDontMatch(openCards);
@@ -244,7 +244,7 @@ function displayPopUp() {
 		setTimeout(function() {
 			popUp.style.display = "block";
 			timePopUp.textContent = timeNeeded + " seconds";
-			movesPopUp.textContent = memorizeCounts;
+			movesPopUp.textContent = memorizeCounts + " moves";
 			starsPopUp.innerHTML = "";
 			if(countMoves > 34) {
 				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
@@ -257,6 +257,6 @@ function displayPopUp() {
 			closePopUp.addEventListener("click", function() {
 				popUp.style.display = "none";
 			});
-		}, 400);
+		}, 300);
 	}
 }
