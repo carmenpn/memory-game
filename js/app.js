@@ -126,57 +126,63 @@ restartButton.addEventListener("click", reset);
 
 // Click function for cards
 function clickCard(evt) {
-	displayCards(evt);
-	// console.log(evt.target.classList.contains("opened"));
-	if(!evt.target.classList.contains("opened")) {
+	if(evt.target.nodeName === "LI" && !evt.target.classList.contains("opened")) {
+		displayCards(evt);
 		addToOpenCards(evt);
+		counterMoves();
 	}
 	if(!firstClickOnTimer) {
 		firstClickOnTimer = true;
 		setTimer = setInterval(countingTime, 1000);
 	}
-	counterMoves();
 	measureTime();
 	displayPopUp();
 }
 
 // Display the card's symbol
 function displayCards(evt) {
-	evt.target.classList.add("open", "show");
+	// if(openCards.length < 2) {
+		evt.target.classList.add("open", "show");
+	// }
 }
 
 // Add the card to a *list* of "open" cards
 function addToOpenCards(evt) {
-	// console.log(evt.target.classList.contains("opened")); //debugging purpose
-	if(evt.target.firstChild !== null) {
-		let clickedCard = evt.target;
-		clickedCard.classList.add("opened");
-		openCards.push(clickedCard.firstChild);
-		// console.log(clickedCard); //debugging purpose
-		// console.log(clickedCard.firstChild); //debugging purpose
-	}
+	let clickedCard = evt.target;
+	openCards.push(clickedCard.firstChild);
+	clickedCard.classList.add("opened");		
 	checkIfcardsMatch(openCards);
 }
 
 // If cards match
-function checkIfcardsMatch(arr) {	
-	if(arr.length === 2 && arr[0].className === arr[1].className) {
-		for(let i = 0; i < arr.length; i++) {
-			arr[i].parentNode.classList.add("match", "card", "show", "opened");
+function checkIfcardsMatch(arr) {
+	if(arr.length === 2) {
+		if(arr[0].classList.value === arr[1].classList.value) {
+			cardsMatch(arr);
+		} else {
+			cardsDontMatch(arr);
 		}
-		cardsMatched.push(arr[0]);
-		arr.splice(0, arr.length);
-	} else if (arr.length === 2 && arr[0].className !== arr[1].className) {
-		for(let i = 0; i < arr.length; i++) {
-			arr[i].parentNode.classList.add("wrong", "card", "show");
-		}
-		setTimeout(function() {
-			for(let i = 0; i < arr.length; i++) {
-				arr[i].parentNode.classList.remove("wrong", "show", "open", "opened");
-			}
-			arr.splice(0, arr.length);
-		}, 400);
 	}
+}
+
+function cardsMatch(arr) {
+	for(let i = 0; i < arr.length; i++) {
+		arr[i].parentNode.classList.add("match", "card", "show", "opened");
+	}
+	cardsMatched.push(arr[0]);
+	arr.splice(0, arr.length);
+}
+
+function cardsDontMatch(arr) {
+	for(let i = 0; i < arr.length; i++) {
+		arr[i].parentNode.classList.add("wrong", "card", "show", "open");
+	}
+	setTimeout(function() {
+		for(let i = 0; i < arr.length; i++) {
+			arr[i].parentNode.classList.remove("wrong", "show", "open", "opened");
+		}
+		arr.splice(0, arr.length);
+	}, 400);
 }
 
 // ======================
@@ -270,6 +276,7 @@ function displayStarsPopUp() {
 	}
 }
 
+// Close pop-up
 function popUpX() {
 	closePopUp.addEventListener("click", function() {
 		popUp.style.display = "none";
