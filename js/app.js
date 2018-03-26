@@ -59,6 +59,10 @@ let countMoves 		= 0,
  *   - add each card's HTML to the page
  */
 
+// ======================
+// RESET FUNCTION
+// ======================
+
 reset();
 
 // Reset deck of cards and generate random cards
@@ -67,7 +71,7 @@ function reset() {
 	for(let i = 0; i < shuffleCards.length; i++) {
 		card[i].innerHTML = "";
 		// Remove classes
-		card[i].classList.remove("open", "show", "match", "opened");
+		card[i].classList.remove("open", "show", "match", "opened", "wrong");
 		// Automatically generate HTML
 		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
 	}
@@ -141,20 +145,19 @@ function clickCard(evt) {
 
 // Display the card's symbol
 function displayCards(evt) {
-	// if(openCards.length < 2) {
+	if(openCards.length < 2) {
 		evt.target.classList.add("open", "show");
-	// }
+	}
 }
 
 // Add the card to a *list* of "open" cards
 function addToOpenCards(evt) {
-	let clickedCard = evt.target;
-	openCards.push(clickedCard.firstChild);
-	clickedCard.classList.add("opened");		
+	openCards.push(evt.target.firstChild);
+	evt.target.classList.add("opened");		
 	checkIfcardsMatch(openCards);
 }
 
-// If cards match
+// Check if cards match
 function checkIfcardsMatch(arr) {
 	if(arr.length === 2) {
 		if(arr[0].classList.value === arr[1].classList.value) {
@@ -168,8 +171,8 @@ function checkIfcardsMatch(arr) {
 function cardsMatch(arr) {
 	for(let i = 0; i < arr.length; i++) {
 		arr[i].parentNode.classList.add("match", "card", "show", "opened");
+		cardsMatched.push(arr[i]);
 	}
-	cardsMatched.push(arr[0]);
 	arr.splice(0, arr.length);
 }
 
@@ -219,7 +222,7 @@ function measureTime() {
 	if(countMoves === 1) {
 		startingTime = performance.now();
 	}
-	if(cardsMatched.length === 8) {
+	if(cardsMatched.length === 16) {
 		endingTime = performance.now();
 		resetTimer();
 		moves.textContent = "0";
@@ -252,7 +255,7 @@ function counterMoves() {
 
 // Display pop-up if user wins
 function displayPopUp() {
-	if(cardsMatched.length === 8) {
+	if(cardsMatched.length === 16) {
 		setTimeout(function() {
 			popUp.style.display = "block";
 			timePopUp.textContent = timeNeeded + " seconds";
@@ -267,12 +270,12 @@ function displayPopUp() {
 
 // Stars in pop-up
 function displayStarsPopUp() {
-	if(countMoves > 34) {
-		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
-	} else if(countMoves > 54) {
-		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
-	} else {
+	if(countMoves < 35) {
 		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
+	} else if(countMoves < 55) {
+		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
+	} else {
+		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
 	}
 }
 

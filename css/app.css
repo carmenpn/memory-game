@@ -154,7 +154,7 @@ h1 {
     width: 550px;
     margin: 15% auto;
     top: 150px;
-    background-image: url('../img/pop-up-background.jpg');
+    background-image: url('../img/pop-up-background.jpg'); /*Background from unsplash.com*/
     border: 1px solid #888;
 }
 
@@ -189,12 +189,12 @@ h1 {
 
 @media screen and (max-width: 700px) {
     .deck {
-        width: 500px;
+        width: 550px;
     }
 
     .deck .card {
-        width: 115px;
-        height: 115px;
+        width: 105px;
+        height: 105px;
     }
 
     h1 {
@@ -256,6 +256,11 @@ h1 {
 }
 
 @media screen and (max-width: 500px) {
+    .deck .card {
+        width: 80px;
+        height: 80px;
+    }
+
     .pop-up-table td {
         padding: 0 10px;
     }
@@ -284,10 +289,10 @@ h1 {
     }
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 450px) {
     .deck .card {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
     }
 
     .pop-up-content {
