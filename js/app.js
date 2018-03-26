@@ -2,6 +2,28 @@
  * Create a list that holds all of your cards
  */
 
+ /*
+ * Display the cards on the page
+ *   - shuffle the list of cards using the provided "shuffle" method below
+ *   - loop through each card and create its HTML
+ *   - add each card's HTML to the page
+ */
+
+ /*
+ * set up the event listener for a card. If a card is clicked:
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ */
+
+ // ======================
+// DECLARE CARD VARIABLE
+// ======================
+
  const cardList = ["fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", 
  "fa fa-cube", "fa fa-anchor", "fa fa-leaf", "fa fa-bicycle", "fa fa-diamond", "fa fa-bomb", 
  "fa fa-leaf", "fa fa-bomb", "fa fa-bolt", "fa fa-bicycle", "fa fa-paper-plane-o", "fa fa-cube"];
@@ -34,8 +56,8 @@ const popUp 	   = document.querySelector(".pop-up"),
 
 // Timer
 
-let firstClickOnTimer = false;
-let min = 0,
+let firstClickOnTimer = false,
+ 	min = 0,
 	sec = 0,
 	setTimer,
 	timeNeeded,
@@ -51,13 +73,6 @@ const deckOfCards = document.getElementsByClassName("deck"),
 
 let countMoves 		= 0,
 	memorizeCounts 	= 0;
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 // ======================
 // RESET FUNCTION
@@ -103,32 +118,23 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
 // ======================
-// CARDS LISTENER
+// EVENT LISTENERS
 // ======================
 
+// For each card
 for(let i = 0; i < card.length; i++) {
 	card[i].addEventListener("click", clickCard);
 }
 
+// For restart button
 restartButton.addEventListener("click", reset);
 
 // ======================
 // GAME FUNCTIONS
 // ======================
 
-// Click function for cards
+// The main click function for cards
 function clickCard(evt) {
 	if(evt.target.nodeName === "LI" && !evt.target.classList.contains("opened")) {
 		displayCards(evt);
@@ -143,21 +149,21 @@ function clickCard(evt) {
 	displayPopUp();
 }
 
-// Display the card's symbol
+// Display the card's symbol after first click
 function displayCards(evt) {
 	if(openCards.length < 2) {
 		evt.target.classList.add("open", "show");
 	}
 }
 
-// Add the card to a *list* of "open" cards
+// Add the card to a *list* of "open" cards and add a class of 'opened'
 function addToOpenCards(evt) {
 	openCards.push(evt.target.firstChild);
 	evt.target.classList.add("opened");		
 	checkIfcardsMatch(openCards);
 }
 
-// Check if cards match
+// Check if cards match - compare classes
 function checkIfcardsMatch(arr) {
 	if(arr.length === 2) {
 		if(arr[0].classList.value === arr[1].classList.value) {
@@ -217,7 +223,7 @@ function resetTimer() {
 	timer.textContent = "00:00";
 }
 
-// Measure time start - end
+// Measure time from the beginning of the game till the end
 function measureTime() {
 	if(countMoves === 1) {
 		startingTime = performance.now();
@@ -234,6 +240,7 @@ function measureTime() {
 			stars.item(1).style.visibility = "visible";
 		}
 	}
+	// Time needed to finish the game
 	timeNeeded = ((endingTime - startingTime) / 1000).toFixed(0);
 }
 
@@ -241,6 +248,7 @@ function measureTime() {
 function counterMoves() {
 	countMoves++;
 	moves.textContent = countMoves;
+	// Display number of stars depending on number of moves
 	if(countMoves === 35) {
 		stars.item(0).style.visibility = "hidden";
 	} else if(countMoves === 55) {
