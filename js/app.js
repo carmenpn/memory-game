@@ -21,7 +21,7 @@
  */
 
  // ======================
-// DECLARE CARD VARIABLE
+// Declare card variable
 // ======================
 
  const cardList = ["fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", 
@@ -29,7 +29,7 @@
  "fa fa-leaf", "fa fa-bomb", "fa fa-bolt", "fa fa-bicycle", "fa fa-paper-plane-o", "fa fa-cube"];
 
 // ======================
-// DECLARE VARIABLES
+// Declare variables
 // ======================
 
 let shuffleCards,
@@ -75,7 +75,7 @@ let countMoves 		= 0,
 	memorizeCounts 	= 0;
 
 // ======================
-// RESET FUNCTION
+// Reset function
 // ======================
 
 reset();
@@ -119,7 +119,7 @@ function shuffle(array) {
 }
 
 // ======================
-// EVENT LISTENERS
+// Event listeners
 // ======================
 
 // For each card
@@ -131,7 +131,7 @@ for(let i = 0; i < card.length; i++) {
 restartButton.addEventListener("click", reset);
 
 // ======================
-// GAME FUNCTIONS
+// Game functions
 // ======================
 
 // The main click function for cards
@@ -195,7 +195,7 @@ function cardsDontMatch(arr) {
 }
 
 // ======================
-// SCORE PANEL
+// Score panel
 // ======================
 
 // Counting time for Set Interval
@@ -258,7 +258,7 @@ function counterMoves() {
 }
 
 // ======================
-// POP UP WINDOW
+// Pop-up window
 // ======================
 
 // Display pop-up if user wins

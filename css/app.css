@@ -289,10 +289,10 @@ h1 {
     }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 460px) {
     .deck .card {
-        width: 60px;
-        height: 60px;
+        width: 65px;
+        height: 65px;
     }
 
     .pop-up-content {
