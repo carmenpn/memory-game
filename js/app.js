@@ -11,7 +11,7 @@
 // ======================
 
 let shuffleCards,
-	openCards = [],
+	openCards 	 = [],
 	cardsMatched = [];
 
 // Score Panel Section
@@ -47,7 +47,7 @@ let min = 0,
 const deckOfCards = document.getElementsByClassName("deck"),
 	  card 		  = document.getElementsByClassName("card");
 
-//Counting moves
+//Counting moves and memorizing moves for Pop-up
 
 let countMoves 		= 0,
 	memorizeCounts 	= 0;
