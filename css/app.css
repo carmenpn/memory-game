@@ -73,6 +73,10 @@ h1 {
     cursor: default;
 }
 
+.deck.card.opened {
+    cursor: default;
+}
+
 .deck .card.show {
     font-size: 33px;
 }
@@ -160,7 +164,6 @@ h1 {
 
 .pop-up-table {
     margin: 5% auto;
-    width: 90%;
     padding: 20px;
 }
 

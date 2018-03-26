@@ -12,7 +12,7 @@
 
 let shuffleCards,
 	openCards = [],
-	matchCards = [];
+	cardsMatched = [];
 
 // Score Panel Section
 
@@ -34,7 +34,7 @@ const popUp 	   = document.querySelector(".pop-up"),
 
 // Timer
 
-let firstClick = false;
+let firstClickOnTimer = false;
 let min = 0,
 	sec = 0,
 	setTimer,
@@ -67,7 +67,7 @@ function reset() {
 	for(let i = 0; i < shuffleCards.length; i++) {
 		card[i].innerHTML = "";
 		// Remove classes
-		card[i].classList.remove("open", "show", "match");
+		card[i].classList.remove("open", "show", "match", "opened");
 		// Automatically generate HTML
 		card[i].innerHTML = "<i class='" + shuffleCards[i] + "'></i>";
 	}
@@ -75,12 +75,12 @@ function reset() {
 		stars[i].style.visibility = "visible";
 	}
 	resetTimer();
-	firstClick = false;
+	firstClickOnTimer = false;
 	countMoves = 0;
 	moves.textContent = "0";
 	memorizeCounts = 0;
 	openCards = [];
-	matchCards = [];
+	cardsMatched = [];
 	timeNeeded = 0;
 }
 
@@ -115,17 +115,7 @@ function shuffle(array) {
 // ======================
 
 for(let i = 0; i < card.length; i++) {
-	card[i].addEventListener("click", function(evt) {
-		displayCards(evt);
-		addToOpenCards(evt);
-		if(!firstClick) {
-			firstClick = true;
-			setTimer = setInterval(countingTime, 1000);
-		}
-		counterMoves();
-		measureTime();
-		displayPopUp();
-	});
+	card[i].addEventListener("click", clickCard);
 }
 
 restartButton.addEventListener("click", reset);
@@ -134,6 +124,22 @@ restartButton.addEventListener("click", reset);
 // GAME FUNCTIONS
 // ======================
 
+// Click function for cards
+function clickCard(evt) {
+	displayCards(evt);
+	// console.log(evt.target.classList.contains("opened"));
+	if(!evt.target.classList.contains("opened")) {
+		addToOpenCards(evt);
+	}
+	if(!firstClickOnTimer) {
+		firstClickOnTimer = true;
+		setTimer = setInterval(countingTime, 1000);
+	}
+	counterMoves();
+	measureTime();
+	displayPopUp();
+}
+
 // Display the card's symbol
 function displayCards(evt) {
 	evt.target.classList.add("open", "show");
@@ -141,32 +147,32 @@ function displayCards(evt) {
 
 // Add the card to a *list* of "open" cards
 function addToOpenCards(evt) {
-	let clickedCard = evt.target.firstChild;
-	openCards.push(clickedCard);
-	cardsMatch(openCards);
-	cardsDontMatch(openCards);
+	// console.log(evt.target.classList.contains("opened")); //debugging purpose
+	if(evt.target.firstChild !== null) {
+		let clickedCard = evt.target;
+		clickedCard.classList.add("opened");
+		openCards.push(clickedCard.firstChild);
+		// console.log(clickedCard); //debugging purpose
+		// console.log(clickedCard.firstChild); //debugging purpose
+	}
+	checkIfcardsMatch(openCards);
 }
 
 // If cards match
-function cardsMatch(arr) {
+function checkIfcardsMatch(arr) {	
 	if(arr.length === 2 && arr[0].className === arr[1].className) {
 		for(let i = 0; i < arr.length; i++) {
-			arr[i].parentNode.classList.add("match", "card", "show");
+			arr[i].parentNode.classList.add("match", "card", "show", "opened");
 		}
-		matchCards.push(arr[0]);
+		cardsMatched.push(arr[0]);
 		arr.splice(0, arr.length);
-	}
-}
-
-// If cards don't match
-function cardsDontMatch(arr) {
-	if(arr.length === 2 && arr[0].className !== arr[1].className) {
+	} else if (arr.length === 2 && arr[0].className !== arr[1].className) {
 		for(let i = 0; i < arr.length; i++) {
 			arr[i].parentNode.classList.add("wrong", "card", "show");
 		}
 		setTimeout(function() {
 			for(let i = 0; i < arr.length; i++) {
-				arr[i].parentNode.classList.remove("wrong", "show", "open");
+				arr[i].parentNode.classList.remove("wrong", "show", "open", "opened");
 			}
 			arr.splice(0, arr.length);
 		}, 400);
@@ -207,7 +213,7 @@ function measureTime() {
 	if(countMoves === 1) {
 		startingTime = performance.now();
 	}
-	if(matchCards.length === 8) {
+	if(cardsMatched.length === 8) {
 		endingTime = performance.now();
 		resetTimer();
 		moves.textContent = "0";
@@ -240,23 +246,32 @@ function counterMoves() {
 
 // Display pop-up if user wins
 function displayPopUp() {
-	if(matchCards.length === 8) {
+	if(cardsMatched.length === 8) {
 		setTimeout(function() {
 			popUp.style.display = "block";
 			timePopUp.textContent = timeNeeded + " seconds";
 			movesPopUp.textContent = memorizeCounts + " moves";
 			starsPopUp.innerHTML = "";
-			if(countMoves > 34) {
-				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
-			} else if(countMoves > 54) {
-				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
-			} else {
-				starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
-			}
+			displayStarsPopUp();
 			reset();
-			closePopUp.addEventListener("click", function() {
-				popUp.style.display = "none";
-			});
-		}, 300);
+			popUpX();
+		}, 200);
 	}
+}
+
+// Stars in pop-up
+function displayStarsPopUp() {
+	if(countMoves > 34) {
+		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
+	} else if(countMoves > 54) {
+		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
+	} else {
+		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
+	}
+}
+
+function popUpX() {
+	closePopUp.addEventListener("click", function() {
+		popUp.style.display = "none";
+	});
 }
