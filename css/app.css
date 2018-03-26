@@ -164,6 +164,7 @@ h1 {
 
 .pop-up-table {
     margin: 5% auto;
+    width: 90%;
     padding: 20px;
 }
 
@@ -176,6 +177,10 @@ h1 {
 .pop-up-close:hover {
     cursor: pointer;
     text-decoration: none;
+}
+
+.pop-up-table .for-smaller-screens {
+    display: none;
 }
 
 /*
@@ -204,7 +209,7 @@ h1 {
 
 @media screen and (max-width: 600px) {
     .pop-up-content {
-        font-size: 0.9em;
+        font-size: 1em;
         width: 90%;
     }
 
@@ -256,12 +261,26 @@ h1 {
     }
 
     .pop-up-content h2 {
-        font-size: 1.18em;
+        font-size: 1.2em;
         padding-left: 38px;
     }
 
     .pop-up-content {
-        font-size: 0.8em;
+        font-size: 1.1em;
+    }
+
+    .pop-up-table .for-bigger-screens {
+        display: none;
+    }
+
+    .pop-up-table .for-smaller-screens {
+        display: block;
+    }
+
+    .pop-up-time,
+    .pop-up-moves,
+    .pop-up-stars {
+        text-align: right;
     }
 }
 
@@ -269,5 +288,9 @@ h1 {
     .deck .card {
         width: 70px;
         height: 70px;
+    }
+
+    .pop-up-content {
+        font-size: 1em;
     }
 }
