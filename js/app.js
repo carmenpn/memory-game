@@ -1,26 +1,4 @@
-/*
- * Create a list that holds all of your cards
- */
-
- /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
- /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
- // ======================
+// ======================
 // Declare card variable
 // ======================
 
@@ -38,9 +16,7 @@ let shuffleCards,
 
 // Score Panel Section
 
-const scorePanel 	= document.getElementsByClassName("score-panel"),
-	  starsPanel	= document.querySelector(".stars"),
-	  stars 		= document.querySelectorAll(".stars li"),
+const stars 		= document.querySelectorAll(".stars li"),
 	  moves 		= document.querySelector(".moves"),
 	  timer 		= document.querySelector(".timer"),
 	  restartButton = document.querySelector(".restart");
@@ -48,7 +24,6 @@ const scorePanel 	= document.getElementsByClassName("score-panel"),
 //Pop-up Window
 
 const popUp 	   = document.querySelector(".pop-up"),
-	  popUpContent = document.querySelector(".pop-up-content"),
 	  closePopUp   = document.querySelector(".pop-up-close"),
 	  timePopUp    = document.querySelector(".pop-up-time"),
 	  movesPopUp   = document.querySelector(".pop-up-moves"),
@@ -66,8 +41,7 @@ let firstClickOnTimer = false,
 
 // Card Deck
 
-const deckOfCards = document.getElementsByClassName("deck"),
-	  card 		  = document.getElementsByClassName("card");
+const card = document.getElementsByClassName("card");
 
 //Counting moves and memorizing moves for Pop-up
 
@@ -83,7 +57,7 @@ reset();
 // Reset deck of cards and generate random cards
 function reset() {
 	shuffleCards = shuffle(cardList);
-	for(let i = 0; i < shuffleCards.length; i++) {
+	for (let i = 0; i < shuffleCards.length; i++) {
 		card[i].innerHTML = "";
 		// Remove classes
 		card[i].classList.remove("open", "show", "match", "opened", "wrong");
@@ -123,7 +97,7 @@ function shuffle(array) {
 // ======================
 
 // For each card
-for(let i = 0; i < card.length; i++) {
+for (let i = 0; i < card.length; i++) {
 	card[i].addEventListener("click", clickCard);
 }
 
@@ -136,12 +110,12 @@ restartButton.addEventListener("click", reset);
 
 // The main click function for cards
 function clickCard(evt) {
-	if(evt.target.nodeName === "LI" && !evt.target.classList.contains("opened")) {
+	if (evt.target.nodeName === "LI" && !evt.target.classList.contains("opened")) {
 		displayCards(evt);
 		addToOpenCards(evt);
 		counterMoves();
 	}
-	if(!firstClickOnTimer) {
+	if (!firstClickOnTimer) {
 		firstClickOnTimer = true;
 		setTimer = setInterval(countingTime, 1000);
 	}
@@ -151,7 +125,7 @@ function clickCard(evt) {
 
 // Display the card's symbol after first click
 function displayCards(evt) {
-	if(openCards.length < 2) {
+	if (openCards.length < 2) {
 		evt.target.classList.add("open", "show");
 	}
 }
@@ -165,8 +139,8 @@ function addToOpenCards(evt) {
 
 // Check if cards match - compare classes
 function checkIfcardsMatch(arr) {
-	if(arr.length === 2) {
-		if(arr[0].classList.value === arr[1].classList.value) {
+	if (arr.length === 2) {
+		if (arr[0].classList.value === arr[1].classList.value) {
 			cardsMatch(arr);
 		} else {
 			cardsDontMatch(arr);
@@ -175,7 +149,7 @@ function checkIfcardsMatch(arr) {
 }
 
 function cardsMatch(arr) {
-	for(let i = 0; i < arr.length; i++) {
+	for (let i = 0; i < arr.length; i++) {
 		arr[i].parentNode.classList.add("match", "card", "show", "opened");
 		cardsMatched.push(arr[i]);
 	}
@@ -183,11 +157,11 @@ function cardsMatch(arr) {
 }
 
 function cardsDontMatch(arr) {
-	for(let i = 0; i < arr.length; i++) {
+	for (let i = 0; i < arr.length; i++) {
 		arr[i].parentNode.classList.add("wrong", "card", "show", "open");
 	}
 	setTimeout(function() {
-		for(let i = 0; i < arr.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			arr[i].parentNode.classList.remove("wrong", "show", "open", "opened");
 		}
 		arr.splice(0, arr.length);
@@ -201,15 +175,15 @@ function cardsDontMatch(arr) {
 // Counting time for Set Interval
 function countingTime() {
 	sec++;
-	if(sec < 10 && min < 10) {
+	if (sec < 10 && min < 10) {
 		timer.textContent = "0" + min + ":" + "0" + sec;
-	} else if(sec < 60 && min < 10) {
+	} else if (sec < 60 && min < 10) {
 		timer.textContent = "0" + min + ":" + sec;
 	} else {
 		sec = 0;
 		min++;
 		sec++;
-		if(min > 9) {
+		if (min > 9) {
 			timer.textContent = min + ":" + "0" + sec;
 		}
 	}
@@ -225,17 +199,17 @@ function resetTimer() {
 
 // Measure time from the beginning of the game till the end
 function measureTime() {
-	if(countMoves === 1) {
+	if (countMoves === 1) {
 		startingTime = performance.now();
 	}
-	if(cardsMatched.length === 16) {
+	if (cardsMatched.length === 16) {
 		endingTime = performance.now();
 		resetTimer();
 		moves.textContent = "0";
-		if(countMoves > 34) {
+		if (countMoves > 34) {
 			stars.item(0).style.visibility = "visible";
 			stars.item(1).style.visibility = "visible";
-		} else if(countMoves > 54) {
+		} else if (countMoves > 54) {
 			stars.item(0).style.visibility = "visible";
 			stars.item(1).style.visibility = "visible";
 		}
@@ -249,9 +223,9 @@ function counterMoves() {
 	countMoves++;
 	moves.textContent = countMoves;
 	// Display number of stars depending on number of moves
-	if(countMoves === 35) {
+	if (countMoves === 35) {
 		stars.item(0).style.visibility = "hidden";
-	} else if(countMoves === 55) {
+	} else if (countMoves === 55) {
 		stars.item(1).style.visibility = "hidden";
 	}
 	memorizeCounts = countMoves;
@@ -263,7 +237,7 @@ function counterMoves() {
 
 // Display pop-up if user wins
 function displayPopUp() {
-	if(cardsMatched.length === 16) {
+	if (cardsMatched.length === 16) {
 		setTimeout(function() {
 			popUp.style.display = "block";
 			timePopUp.textContent = timeNeeded + " seconds";
@@ -278,9 +252,9 @@ function displayPopUp() {
 
 // Stars in pop-up
 function displayStarsPopUp() {
-	if(countMoves < 35) {
+	if (countMoves < 35) {
 		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
-	} else if(countMoves < 55) {
+	} else if (countMoves < 55) {
 		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span><span><i class='fa fa-star'></i></span>";
 	} else {
 		starsPopUp.innerHTML = "<span><i class='fa fa-star'></i></span>";
